@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "deals",
+  "info": {
+    "singularName": "deal",
+    "pluralName": "deals",
+    "displayName": "Deal"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "deal_status": {
+      "type": "enumeration",
+      "enum": [
+        "new",
+        "in_progress",
+        "negotiation",
+        "won",
+        "lost"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "required": true
+    },
+    "amount": {
+      "type": "integer",
+      "required": true,
+      "min": 0
+    },
+    "client": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::client.client",
+      "inversedBy": "deals"
+    },
+    "interactions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::interaction.interaction",
+      "mappedBy": "deal"
+    }
+  }
+}

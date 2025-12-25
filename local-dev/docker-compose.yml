@@ -18,8 +18,10 @@ services:
     volumes:
       - ./cms-backend:/srv/app
       - /srv/app/node_modules
+      - /srv/app/dist
     ports:
       - "${STRAPI_PORT:-1337}:1337"
+      - "5173:5173"
     depends_on:
       - postgres
     env_file:
@@ -34,6 +36,9 @@ services:
       DATABASE_SSL: "false"
       HOST: 0.0.0.0
       PORT: 1337
+      NODE_ENV: ${NODE_ENV:-development}
+      STRAPI_ADMIN_BACKEND_URL: ${STRAPI_ADMIN_BACKEND_URL}
+      STRAPI_PUBLIC_URL: ${STRAPI_PUBLIC_URL}
 
   cms-frontend:
     build:
@@ -51,8 +56,8 @@ services:
     env_file:
       - ./.env
     environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_STRAPI_URL=http://localhost:${STRAPI_PORT:-1337}
+      NODE_ENV: ${NODE_ENV:-development}
+      NEXT_PUBLIC_STRAPI_URL: http://localhost:1337
 
 volumes:
   postgres_data:

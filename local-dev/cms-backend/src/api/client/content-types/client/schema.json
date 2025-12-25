@@ -1,0 +1,52 @@
+{
+  "kind": "collectionType",
+  "collectionName": "clients",
+  "info": {
+    "singularName": "client",
+    "pluralName": "clients",
+    "displayName": "Client"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "tier": {
+      "type": "enumeration",
+      "enum": [
+        "prospect",
+        "active",
+        "vip",
+        "inactive"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "required": true
+    },
+    "company_name": {
+      "type": "string",
+      "minLength": 1,
+      "required": true
+    },
+    "contacts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::contact.contact",
+      "mappedBy": "client"
+    },
+    "deals": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::deal.deal",
+      "mappedBy": "client"
+    },
+    "lead": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::lead.lead",
+      "inversedBy": "client"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "interactions",
+  "info": {
+    "singularName": "interaction",
+    "pluralName": "interactions",
+    "displayName": "Interactions"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "call",
+        "email",
+        "meeting",
+        "note"
+      ]
+    },
+    "date": {
+      "type": "datetime"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "deal": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::deal.deal",
+      "inversedBy": "interactions"
+    }
+  }
+}

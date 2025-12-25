@@ -11,8 +11,12 @@ RUN npm ci
 # Copy application code
 COPY . .
 
+# Copy and set permissions for entrypoint script
+COPY docker-entrypoint.sh ./
+RUN chmod +x ./docker-entrypoint.sh
+
 # Expose Strapi port
 EXPOSE 1337
 
-# Default command (can be overridden in docker-compose)
-CMD ["npm", "run", "develop"]
+# Use entrypoint script
+ENTRYPOINT ["./docker-entrypoint.sh"]
