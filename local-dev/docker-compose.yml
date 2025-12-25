@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: strapi-postgres
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  cms-backend:
+    build:
+      context: ./cms-backend
+      dockerfile: Dockerfile
+    container_name: cms-backend
+    volumes:
+      - ./cms-backend:/srv/app
+      - /srv/app/node_modules
+    ports:
+      - "${STRAPI_PORT:-1337}:1337"
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${POSTGRES_DB}
+      DATABASE_USERNAME: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_SSL: "false"
+      HOST: 0.0.0.0
+      PORT: 1337
+
+  cms-frontend:
+    build:
+      context: ./cms-frontend
+      dockerfile: Dockerfile
+    container_name: cms-frontend
+    volumes:
+      - ./cms-frontend:/srv/app
+      - /srv/app/node_modules
+      - /srv/app/.next
+    ports:
+      - "${NEXTJS_PORT:-3000}:3000"
+    depends_on:
+      - cms-backend
+    env_file:
+      - ./.env
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_STRAPI_URL=http://localhost:${STRAPI_PORT:-1337}
+
+volumes:
+  postgres_data:
